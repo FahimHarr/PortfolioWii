@@ -2107,7 +2107,8 @@ const allTracks=()=>[...THEMES.map(th=>th.musique||"audio/menu.mp3"),MSG_OST];
 const themeOst=()=>THEMES[Math.max(0,shownTheme)].musique||"audio/menu.mp3";
 function track(src){
   if(!TRACKS[src]){
-    const a=new Audio(src); a.loop=true; a.preload="auto"; a.volume=0;
+    // preload="none" : rien n'est téléchargé tant qu'on n'en a pas besoin (15 Mo de musiques à l'arrivée = saccades en ligne)
+    const a=new Audio(src); a.loop=true; a.preload="none"; a.volume=0;
     a.addEventListener("error",()=>audioError(src));
     TRACKS[src]=a;
   }
@@ -2127,6 +2128,9 @@ function switchMusic(src,ms=2400){
 /* Les navigateurs (surtout Safari / iPhone) n'autorisent la lecture
    que PENDANT un clic. On lance donc l'OST tout de suite au clic, en muet,
    puis on la rend audible quand le son de démarrage est fini. */
+const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+// les autres musiques se téléchargent en arrière-plan une fois l'arrivée finie (allumage + cascade du menu)
+setTimeout(()=>allTracks().forEach(s=>{ const a=track(s); if(a!==bgm&&a.paused&&a.preload==="none") a.preload="auto"; }),6000);
 function unlockMusic(){
   if(musicOn||!soundOn) return;
   musicOn=true;
@@ -2135,8 +2139,9 @@ function unlockMusic(){
   bgm.muted=true; setVol(bgm,0);
   const p=bgm.play();
   if(p) p.catch(err=>{ musicOn=false; console.warn("OST bloquée :",err); });
-  // les autres pistes des thèmes sont « débloquées » pendant ce même clic, pour pouvoir les lancer plus tard
-  allTracks().forEach(s=>{
+  // iPhone / iPad : les autres pistes doivent être « débloquées » pendant ce même clic pour pouvoir les lancer plus tard
+  // (les autres navigateurs n'en ont pas besoin, et ça forcerait à tout télécharger d'un coup)
+  if(IOS) allTracks().forEach(s=>{
     const a=track(s);
     if(a!==bgm){ a.muted=true; a.play().then(()=>{ if(a!==bgm){ a.pause(); a.muted=false; } }).catch(()=>{}); }
   });
