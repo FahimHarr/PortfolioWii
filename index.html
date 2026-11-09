@@ -119,16 +119,15 @@ button.tile:active{transform:scale(.98);transition-duration:.12s}
   box-shadow:inset 0 2px 6px rgba(0,0,0,.05);cursor:default;
 }
 .tile.empty::after{display:none}
-/* case vide : un « ? » pâle qui respire (projet à venir), décalé d'une case à l'autre */
+/* case vide : une ampoule (place pour une idée) qui s'allume doucement, décalée d'une case à l'autre */
 .tile.empty::before{
-  content:"?";position:absolute;inset:0;display:grid;place-items:center;
-  font-family:"Nunito",sans-serif;font-weight:900;font-size:clamp(28px,calc(5 * var(--u)),72px);line-height:1;
-  color:#fff;opacity:.06;
+  content:"";position:absolute;inset:16%;background:url(images/ampoule.webp) center/contain no-repeat;
+  opacity:.55;
   animation:q-breathe 5.5s ease-in-out var(--qd,0s) infinite;
   transition:transform .4s var(--spring);
 }
-@keyframes q-breathe{0%,100%{opacity:.05}50%{opacity:.14}}
-.tile.empty:hover::before{transform:rotate(-10deg) scale(1.15);animation-play-state:paused;opacity:.22}
+@keyframes q-breathe{0%,100%{opacity:.4}50%{opacity:.75}}
+.tile.empty:hover::before{transform:rotate(-10deg) scale(1.15);animation-play-state:paused;opacity:1}
 
 /* Bannière = contenu visuel d'une chaîne (réutilisé en grand) */
 .banner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
@@ -244,11 +243,6 @@ button.tile:active{transform:scale(.98);transition-duration:.12s}
 .b-sport .pitch::before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:2px solid rgba(255,255,255,.75)}
 .b-sport .pitch::after{content:"";position:absolute;left:50%;top:50%;width:22%;aspect-ratio:1;border:2px solid rgba(255,255,255,.75);border-radius:50%;transform:translate(-50%,-50%)}
 
-/* Tarifs */
-.b-tarifs{background:linear-gradient(180deg,#fff,#dcf2fb)}
-.b-tarifs .name{color:var(--wii-deep)}
-.b-tarifs .euro{position:absolute;right:-4%;bottom:-22%;font-size:9em;font-weight:900;color:rgba(52,177,228,.12)}
-.big .b-tarifs .euro{font-size:28em}
 
 /* Méthode */
 .b-process{background:linear-gradient(180deg,#fffbea,#ffe9a8)}
@@ -775,7 +769,7 @@ main{position:relative;z-index:1}
 .dt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:10px}
 .dt-grid>*{position:relative;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#2a2c31 center/cover no-repeat}
 .dt-grid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.dt-grid .dt-q{display:grid;place-items:center;font-weight:900;font-size:22px;color:rgba(255,255,255,.12)}
+.dt-grid .dt-q{background:url(images/ampoule.webp) center/auto 62% no-repeat;opacity:.55}
 
 /* ---------- Flèches de page ---------- */
 .pg{
@@ -891,7 +885,6 @@ body.ch-open main .banner *{animation-play-state:paused}
 html,body,*{cursor:url(cursors/wii-pointer-blue.png) 11 1,auto}
 button,a,[role=button],#warning,button *,a *{cursor:url(cursors/wii-pointer-blue.png) 11 1,pointer}
 button:active,a:active,#warning:active,button:active *,a:active *{cursor:url(cursors/wii-grab.png) 11 10,pointer}
-.tile.empty{cursor:url(cursors/wii-pointer-blue.png) 11 1,auto}
 
 /* Main Wii animée (souris uniquement) : remplace le curseur système quand le JS est actif */
 html.wii-cursor,html.wii-cursor *{cursor:none!important}
@@ -1159,7 +1152,6 @@ button.tile::before{display:none}
 .dot-tip::before{background:#fff;border-color:var(--wii)}
 .dt-head b{color:var(--ink)}
 .dt-grid>*{background-color:#e9ecef}
-.dt-grid .dt-q{color:rgba(0,0,0,.18)}
 
 #toast{background:#fff;border-color:var(--wii);color:var(--ink);box-shadow:0 0 0 6px rgba(52,177,228,.18),0 14px 30px rgba(40,60,80,.25)}
 #toast b{color:var(--wii-deep)}
@@ -1186,7 +1178,11 @@ body{background-color:var(--bg)}
 .tile{background:#24262b}
 .tile::after{background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 40%)} /* reflet brillant d'époque */
 .tile.empty{background:rgba(255,255,255,.035);border-color:#2b2e33;box-shadow:inset 0 2px 8px rgba(0,0,0,.35)}
-.tile.empty::before{color:#fff}
+.idea{position:absolute;left:50%;bottom:8%;padding:.3em .9em;border-radius:99px;white-space:nowrap;font-weight:900;font-size:clamp(10px,calc(1.25 * var(--u)),16px);color:#30353a;
+  background:linear-gradient(180deg,#fff,#e2e5e9);box-shadow:0 0 0 2px var(--wii),0 4px 10px rgba(0,0,0,.5);
+  opacity:0;transform:translate(-50%,8px) scale(.85);transition:opacity .15s ease,transform .3s var(--spring);pointer-events:none}
+.tile.empty:hover .idea,.tile.empty:focus-visible .idea{opacity:1;transform:translate(-50%,0)}
+.tile.empty:hover,.tile.empty:focus-visible{border-color:var(--wii);outline:none}
 .theme{color:#c9cdd3}
 .theme small{color:#80858d}
 .dot{background:#3a3d43}
@@ -1243,7 +1239,6 @@ body{background-color:var(--bg)}
 .act-times{color:#949ba4}
 .dt-head b{color:var(--ink)}
 .dt-grid>*{background-color:#2a2c31}
-.dt-grid .dt-q{color:rgba(255,255,255,.12)}
 #toast b{color:#7fd0f2}
 #toast span{color:#c9cdd3}
 #toast kbd{background:#2a2c31;border-color:#3a3d43}
@@ -1496,7 +1491,6 @@ body{background-color:var(--bg)}
    À PERSONNALISER
    - yt : l'ID de ta vidéo YouTube (https://youtu.be/XXXX -> "XXXX")
    - EMAIL et LINKS : tes vrais contacts
-   - Les prix "XX €" dans la chaîne Tarifs
    - THEMES : une page par thème, avec son titre au-dessus des 12 cadres (au-delà de 12 vidéos,
      le thème continue sur une page de plus). couleur = ambiance du thème,
      musique = piste du menu pour ce thème (par défaut audio/menu.mp3). Une ligne par vidéo :
@@ -1543,7 +1537,6 @@ const ART = {
   motion:`<div class="banner b-motion"><span class="s s1"></span><span class="s s2"></span><span class="s s3"></span><div class="name">Motion design<small>After Effects</small></div></div>`,
   geo:`<div class="banner b-geo"><div class="scan"></div><div class="name">Géopolitique<small>Chaîne d'actu</small></div></div>`,
   sport:`<div class="banner b-sport"><div class="pitch"></div><div class="name">Sport<small>Foot & highlights</small></div></div>`,
-  tarifs:`<div class="banner b-tarifs"><span class="euro">€</span><div class="name">Tarifs<small>Devis gratuit</small></div></div>`,
   process:`<div class="banner b-process"><div class="name">Ma méthode<small>Du brief à la livraison</small></div><div class="steps"><i></i><i></i><i></i><i></i><i></i></div></div>`,
   contact:`<div class="banner b-contact"><div class="name">1 nouveau message<small>Parlons de ton projet</small></div></div>`
 };
@@ -1573,9 +1566,6 @@ const CH = {
   sport:{ t:"Sport", s:"Contenus football et highlights", yt:"",
     text:"Montage énergique, stats à l'écran et coupes calées sur la musique pour des contenus sportifs qui tapent.",
     side:`<h3>Techniques</h3>`+chips(["Highlights","Stats","Cut on beat"]) },
-  tarifs:{ t:"Tarifs", s:"Devis gratuit, réponse sous 1 h", go:"contact",
-    text:"Chaque projet est chiffré selon la durée et la complexité. Envoie-moi un lien vers ta chaîne ou tes rushes et je te fais un devis.",
-    side:rows([["Short format","dès XX €"],["Long format","dès XX €"],["Motion design","sur devis"],["Forfait mensuel","sur devis"]]) },
   process:{ t:"Ma méthode", s:"Du premier DM à la livraison", go:"contact",
     text:"Clique sur les étapes de la route au-dessus pour voir comment se passe un projet avec moi, du premier message à la vidéo livrée.",
     side:rows([["1. Premier contact","DM sur Discord"],["2. Le call","deadline & prix"],["3. La V1","première ébauche"],["4. Les retours","3 max"],["5. Version finale","livrée à temps"]]) },
@@ -1762,7 +1752,7 @@ ART.about=`<div class="banner b-about"><i class="ab-blur"></i><img class="ab-img
     <div class="ab-txt"><h2>À propos</h2><p class="ab-sub">${CH.about.s}</p><p>${CH.about.text}</p></div></div></div>`;
 
 /* Une vidéo par cadre, dans l'ordre de la liste VIDEOS (12 par page).
-   À propos, Tarifs et Contact restent accessibles par le dock ;
+   À propos et Contact restent accessibles par le dock ;
    les anciennes chaînes (long, short, motion…) sont gardées dans CH pour pouvoir les remettre. */
 const ytId = u => (u.match(/(?:youtu\.be\/|[?&]v=|shorts\/|embed\/|live\/)([\w-]{11})/)||[])[1] || u.trim();
 let nVid=0;
@@ -1811,8 +1801,8 @@ for(let p=0;p<nPages;p++){
   for(let s=0;s<PER;s++){
     const id=P.keys[s];
     if(!id){
-      const d=document.createElement("div"); d.className="tile empty"; d.setAttribute("aria-hidden","true");
-      d.style.setProperty("--qd",`${-((s*1.7)%5.5).toFixed(2)}s`); // chaque « ? » respire à son rythme
+      const d=document.createElement("a"); d.className="tile empty"; d.href="#"; d.setAttribute("aria-label","Ta vidéo ici ? Écris-moi sur Discord"); d.innerHTML='<span class="idea">Ta vidéo ici ?</span>';
+      d.style.setProperty("--qd",`${-((s*1.7)%5.5).toFixed(2)}s`); // chaque ampoule respire à son rythme
       pg.appendChild(d);
     }
     else{
@@ -1880,7 +1870,7 @@ const tipContent=THEMES.map((th,t)=>{
       cell.style.backgroundImage=`url(${u})`;
     }
     else if(c&&c.local){ const v=document.createElement("video"); v.src=c.local+"#t=1"; v.muted=true; v.preload="none"; v.playsInline=true; cell.appendChild(v); }
-    else { cell.className="dt-q"; cell.textContent="?"; }
+    else { cell.className="dt-q"; }
     gridEl.appendChild(cell);
   }
   box.append(head,gridEl);
@@ -2032,7 +2022,7 @@ addEventListener("pointerdown",()=>{ if(ctx&&ctx.state!=="running") ctx.resume()
 document.addEventListener("click",e=>{ if(e.target.closest(".chat-chips button,.msg-acts button")) clickSnd(); },true); // capture : avant que le bouton soit remplacé
 
 document.addEventListener("pointerover",e=>{
-  const t=e.target.closest("button.tile,.orb,.pill,.sd,.pg,.dot,.chat-chips button,.msg-acts button,.m-step");
+  const t=e.target.closest("button.tile,a.tile,.orb,.pill,.sd,.pg,.dot,.chat-chips button,.msg-acts button,.m-step");
   if(t && !t.contains(e.relatedTarget)) hoverSnd();
 });
 document.addEventListener("focusin",e=>{ if(e.target.matches("button.tile,.orb,.pill")) hoverSnd(); });
@@ -2868,8 +2858,8 @@ const FAQ=[
     a:()=>"Fahim est un <b>jeune monteur basé en France</b>.", acts:[["Voir sa page À propos",()=>openFromChat("about")]] },
   { cat:"tarifs", chip:"Comment on te paie ?", keys:["paie","payer","paiement","virement","paypal","lydia","regler","reglement","rib","carte"],
     a:()=>"<b>Uniquement par virement bancaire</b>, pour que tous les paiements soient tracés." },
-  { cat:"tarifs", chip:"Tu fais des forfaits ?", keys:["forfait","pack","plusieurs video","par mois","mensuel","reduction","remise","promo","prix degressif"],
-    a:()=>"Oui ! Des <b>forfaits</b> sont possibles, avec une <b>réduction</b> si tu commandes plusieurs vidéos.",
+  { keys:["forfait","pack","plusieurs video","par mois","mensuel","reduction","remise","promo","prix degressif"],
+    a:()=>"Fahim <b>facture au projet</b>. Si tu as plusieurs vidéos, parles-en pendant le call : une <b>réduction</b> est possible.",
     acts:[["Demander un devis",()=>askQuote()]] },
   { cat:"delais", chip:"Tu acceptes les commandes urgentes ?", keys:["urgent","urgence","express","asap","rapidement","au plus vite","demain","ce soir"],
     a:()=>"Oui, bien sûr : les <b>commandes urgentes</b> sont acceptées. Précise ta date limite dans ton message.",
@@ -2907,9 +2897,9 @@ const FAQ=[
   { cat:"services", chip:"Tu fais quels types de vidéos ?", keys:["type","genre","fais quoi","faire","service","format","long","court","motion","comme video","quel genre"],
     a:()=>"Fahim monte des <b>vidéos longues</b> pour YouTube (récaps, vidéos explicatives…), des <b>formats courts</b> (Shorts, TikTok, Reels) et fait du <b>motion design</b> sur After Effects.",
     acts:[["Formats longs",()=>goTheme(0)],["Formats courts",()=>goTheme(1)],["Motion design",()=>goTheme(2)]] },
-  { cat:"tarifs", chip:"Combien ça coûte ?", keys:["prix","tarif","cout","coute","combien","budget","devis","cher","euro","depend","calcule"],
-    a:()=>"Le prix dépend de la <b>complexité du montage</b> et du <b>temps de rendu</b>. Le <b>devis est gratuit</b>, avec une réponse sous 1 h.",
-    acts:[["Voir les tarifs",()=>openFromChat("tarifs")],["Demander un devis",()=>askQuote()]] },
+  { keys:["prix","tarif","cout","coute","combien","budget","devis","cher","euro","depend","calcule"],
+    a:()=>"Fahim <b>facture au projet</b> : le prix se fixe pendant le call, selon ce que tu veux faire. Écris-lui sur Discord, il te répond sous 1 h.",
+    acts:[["Lui écrire sur Discord",()=>askQuote()]] },
   { cat:"collab", chip:"Comment on travaille ensemble ?", keys:["comment on travaille","travail","travaille ensemble","process","methode","etape","deroule","retour","modif","revision","livraison"],
     a:()=>"C'est simple : <b>1.</b> tu lui écris sur Discord → <b>2.</b> un call pour fixer la deadline et le prix → <b>3.</b> la V1 → <b>4.</b> tes retours (3 max) → <b>5.</b> la version finale, livrée à temps.",
     acts:[["Voir sa méthode",()=>openFromChat("process")]] },
@@ -2981,6 +2971,8 @@ function ask(q){ bubble("me",q); answer(q); }
 // raccourcis utilisés par les boutons des réponses
 function goTheme(t){ closeChat(); if(current) closeChannel(); showPage(PAGES.findIndex(P=>P.theme===t)); }
 function openFromChat(id){ closeChat(); if(!current) openChannel(id); }
+// case vide : l'ampoule propose de mettre la vidéo du visiteur ici
+document.addEventListener("click",e=>{ if(e.target.closest(".tile.empty")){ e.preventDefault(); openSnd(); askQuote(); } });
 function askQuote(){
   copyText(`Salut Fahim ! 👋
 J'ai vu ton portfolio et j'aimerais un devis.
@@ -2996,11 +2988,11 @@ Merci !`);
   toast(`<b>Message copié ✓</b><span>Colle-le dans mon DM Discord (<kbd>Ctrl</kbd> + <kbd>V</kbd>) et complète-le.</span>`);
 }
 // questions toutes prêtes, rangées par thème : d'abord les thèmes, puis les questions du thème choisi
-const QCATS=[["services","","Services"],["tarifs","","Tarifs"],["delais","","Délais"],["collab","","Collab"],["production","","Production"],["contact","","Contact"]];
+const QCATS=[["services","","Services"],["tarifs","","Paiement"],["delais","","Délais"],["collab","","Collab"],["production","","Production"],["contact","","Contact"]];
 // ordre d'affichage dans chaque thème : les questions qu'un client pose en premier d'abord
 const QORDER=[
   "Tu fais quels types de vidéos ?","Tu fais du format vertical (TikTok, Reels) ?","Tu fais du motion design ?","Tu montes des streams / du gaming ?","Tu fais des vidéos pour des marques ?","Tu montes des vidéos de quelle durée ?","Tu fais l'étalonnage ?","Tu peux reprendre un montage commencé ?","Tu fais les miniatures ?","Tu filmes aussi ?","Il y a des sujets que tu refuses ?",
-  "Combien ça coûte ?","Le devis est gratuit ?","Tu fais des forfaits ?","Tu demandes un acompte ?","Comment on te paie ?","Et si je veux plus de 3 retouches ?","Tu peux faire une facture ?",
+  "Le devis est gratuit ?","Tu demandes un acompte ?","Comment on te paie ?","Et si je veux plus de 3 retouches ?","Tu peux faire une facture ?",
   "Ça prend combien de temps ?","Il faut s'y prendre combien de temps à l'avance ?","Tu acceptes les commandes urgentes ?","Et si j'envoie mes rushes en retard ?","Tu réponds le week-end ?",
   "Comment on travaille ensemble ?","Les retouches sont incluses ?","Je peux voir l'avancement ?","Tu peux m'aider sur l'idée ?","Tu peux suivre le style de ma chaîne ?","Tu travailles avec les petites chaînes ?","Tu prends des clients réguliers ?","Tu bosses seul ou en équipe ?","Tu fais des vidéos test ?","Le projet peut rester confidentiel ?","Tu veux être crédité ?","Avec qui tu as déjà bossé ?",
   "Comment je t'envoie mes rushes ?","Tu livres en quelle qualité ?","Tu t'occupes du son ?","Tu ajoutes les sous-titres ?","Sous-titres en plusieurs langues ?","Tu crées des intros / outros ?","Tu fournis les fichiers sources ?","Tu utilises quels logiciels ?",
